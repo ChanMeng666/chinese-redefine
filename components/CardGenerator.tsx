@@ -74,18 +74,46 @@ const HanyuCardGenerator = () => {
                     variants={cardVariants}
                 >
                     <Card className="shadow-lg">
+                        {/*<CardHeader className="space-y-2 px-4 sm:px-6">*/}
+                        {/*    <motion.div*/}
+                        {/*        initial={{ opacity: 0, y: -20 }}*/}
+                        {/*        animate={{ opacity: 1, y: 0 }}*/}
+                        {/*        transition={{ delay: 0.2 }}*/}
+                        {/*    >*/}
+                        {/*        <CardTitle className="text-center text-2xl sm:text-3xl font-bold break-words">*/}
+                        {/*            汉语新解卡片生成器*/}
+                        {/*        </CardTitle>*/}
+                        {/*        <p className="text-center text-sm text-slate-500 mt-2">*/}
+                        {/*            用现代视角重新诠释汉语词汇*/}
+                        {/*        </p>*/}
+                        {/*    </motion.div>*/}
+                        {/*</CardHeader>*/}
                         <CardHeader className="space-y-2 px-4 sm:px-6">
                             <motion.div
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
+                                initial={{opacity: 0, y: -20}}
+                                animate={{opacity: 1, y: 0}}
+                                transition={{delay: 0.2}}
                             >
                                 <CardTitle className="text-center text-2xl sm:text-3xl font-bold break-words">
                                     汉语新解卡片生成器
                                 </CardTitle>
-                                <p className="text-center text-sm text-slate-500 mt-2">
-                                    用现代视角重新诠释汉语词汇
-                                </p>
+                                <div className="flex flex-col items-center space-y-2">
+                                    <p className="text-center text-sm text-slate-500 mt-2">
+                                        用现代视角重新诠释汉语词汇
+                                    </p>
+                                    <p className="text-center text-xs text-slate-400 flex items-center gap-1.5">
+                                        Created by{' '}
+                                        <a
+                                            href="https://github.com/ChanMeng666/chinese-redefine"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-500 hover:text-blue-600 transition-colors duration-200 inline-flex items-center gap-1.5"
+                                        >
+                                            Chan Meng
+                                            <span className="inline-block animate-heartbeat">💛</span>
+                                        </a>
+                                    </p>
+                                </div>
                             </motion.div>
                         </CardHeader>
                         <CardContent className="space-y-6 px-4 sm:px-6">
