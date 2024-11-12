@@ -146,7 +146,7 @@
 
 
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, GenerateContentResult } from '@google/generative-ai';
 import { validateWord } from '@/lib/errors';
 import { headers } from 'next/headers';
 
@@ -248,21 +248,34 @@ export async function POST(req: Request) {
             `;
 
             const result = await model.generateContent(prompt);
-            const response = await result.response;
+            // const response = await result.response;
+            const response = result.response;
+
             let text = '';
 
             // 正确处理 Gemini 返回的内容
-            if (response && response.text && typeof response.text === 'function') {
-                text = response.text().trim();
-            } else if (response && typeof response.text === 'string') {
-                text = response.text.trim();
+            // if (response && response.text && typeof response.text === 'function') {
+            //     text = response.text().trim();
+            // } else if (response && typeof response.text === 'string') {
+            //     text = response.text.trim();
+            // } else {
+            //     throw new Error('生成的内容格式无效');
+            // }
+            //
+            // if (!text) {
+            //     throw new Error('未能生成有效内容');
+            // }
+
+            // 处理响应
+            if (response) {
+                text = response.text();
+                if (!text) {
+                    throw new Error('生成的内容为空');
+                }
             } else {
-                throw new Error('生成的内容格式无效');
+                throw new Error('未收到有效的响应');
             }
 
-            if (!text) {
-                throw new Error('未能生成有效内容');
-            }
 
             return NextResponse.json({
                 result: text,
