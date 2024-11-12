@@ -146,7 +146,7 @@
 
 
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI, GenerateContentResult } from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { validateWord } from '@/lib/errors';
 import { headers } from 'next/headers';
 
