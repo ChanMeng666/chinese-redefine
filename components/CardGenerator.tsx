@@ -18,7 +18,6 @@ const HanyuCardGenerator = () => {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState('');
     const [error, setError] = useState('');
-    const [showCopied, setShowCopied] = useState(false);
     const [remainingRequests, setRemainingRequests] = useState(5);
 
     // 显示剩余请求进度条
