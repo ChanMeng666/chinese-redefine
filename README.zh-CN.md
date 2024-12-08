@@ -81,7 +81,7 @@ yarn dev
 我们欢迎所有形式的贡献！如果您想做出重大更改，请先创建 Issue 进行讨论。
 
 ## 开源协议
-本项目采用 [Apache-2.0 license](https://github.com/ChanMeng666/chinese-redefine?tab=Apache-2.0-1-ov-file#) 协议。
+本项目采用 [Apache-2.0 license](LICENSE) 协议。
 
 ## 作者
 

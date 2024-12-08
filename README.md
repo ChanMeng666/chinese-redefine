@@ -81,7 +81,7 @@ yarn dev
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-This project is licensed under the [Apache-2.0 license](https://github.com/ChanMeng666/chinese-redefine?tab=Apache-2.0-1-ov-file#).
+This project is licensed under the [Apache-2.0 license](LICENSE).
 
 ## Author
 
