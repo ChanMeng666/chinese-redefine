@@ -11,6 +11,9 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+![screencapture-chinese-redefine-vercel-app-2024-12-06-12_36_37](https://github.com/user-attachments/assets/ada1a3a7-e29c-4485-90b5-3ca1806d9f85)
+
+
 ## Features
 - 🎯 Modern interpretation of Chinese words from a contemporary perspective
 - 🤖 Powered by Google's Gemini AI for creative and insightful explanations 
