@@ -11,6 +11,10 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+
+https://github.com/user-attachments/assets/19a070c6-89de-41a8-9985-0f30a3811e9f
+
+
 ![screencapture-chinese-redefine-vercel-app-2024-12-06-12_36_37](https://github.com/user-attachments/assets/ada1a3a7-e29c-4485-90b5-3ca1806d9f85)
 
 
