@@ -11,6 +11,12 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+<br/>
+
+[![Explore GitHub Profile README Generator](https://gradient-svg-generator.vercel.app/?text=👉+Try+It+Now!+👈&height=40&template=pride-rainbow)](https://chinese-redefine.vercel.app/)
+
+<br/>
+
 
 https://github.com/user-attachments/assets/19a070c6-89de-41a8-9985-0f30a3811e9f
 
