@@ -106,6 +106,18 @@ Whether you're a language learner, cultural researcher, or simply curious about 
 | [![][demo-badge]][demo-link] | No installation required! Visit our demo to experience AI-powered Chinese word redefinition. |
 | :------------------------------------ | :--------------------------------------------------------------------------------------------- |
 
+## 📸 Screenshots
+
+<div align="center">
+
+**Main Interface**
+<img src="./public/screenshots/screencapture-chinese-redefine-vercel-app-2025-09-06-15_30_22.png" alt="Chinese Redefine Main Interface" width="800" style="border-radius: 8px; margin-bottom: 20px;">
+
+**Word Interpretation Result**
+<img src="./public/screenshots/screencapture-chinese-redefine-vercel-app-2025-09-06-15_32_04.png" alt="Chinese Redefine Word Interpretation" width="800" style="border-radius: 8px;">
+
+</div>
+
 > [!TIP]
 > **⭐ Star us** to receive all release notifications from GitHub without delay!
 
