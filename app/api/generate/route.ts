@@ -230,8 +230,8 @@ export async function POST(req: Request) {
         }
 
         try {
-            // 使用 Gemini-Pro 模型
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            // 使用 Gemini-1.5-Flash 模型（更快且稳定）
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
             // 更温和的 prompt
             const prompt = `
@@ -267,8 +267,8 @@ export async function POST(req: Request) {
             // }
 
             // 处理响应
-            if (response) {
-                text = response.text();
+            if (response && response.text) {
+                text = response.text().trim();
                 if (!text) {
                     throw new Error('生成的内容为空');
                 }

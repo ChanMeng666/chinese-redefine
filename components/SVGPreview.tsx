@@ -17,9 +17,22 @@ const SVGPreview: React.FC<SVGPreviewProps> = ({ word, explanation }) => {
     return (
         <div className="mt-6 bg-white p-4 rounded-lg shadow">
             <div
-                className="w-full overflow-hidden"
-                dangerouslySetInnerHTML={{ __html: svgContent }}
-            />
+                className="w-full flex justify-center items-center"
+                style={{ minHeight: '200px' }}
+            >
+                <div
+                    className="w-full max-w-full svg-container"
+                    dangerouslySetInnerHTML={{ __html: svgContent }}
+                />
+            </div>
+            <style jsx>{`
+                .svg-container svg {
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100% !important;
+                    display: block;
+                }
+            `}</style>
         </div>
     );
 };

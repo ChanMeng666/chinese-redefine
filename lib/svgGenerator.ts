@@ -112,19 +112,41 @@ export const generateSVGCard = ({
                                     width = 800,
                                     height = 400
                                 }: SVGCardOptions): string => {
-    // 根据屏幕宽度调整字体大小和间距
-    const calculateFontSize = (baseSize: number): number => {
+    // 根据屏幕宽度调整尺寸和字体
+    const calculateResponsiveSizes = () => {
         const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
+        
+        // 根据屏幕尺寸调整SVG尺寸
+        let svgWidth = width;
+        let svgHeight = height;
+        let fontScale = 1;
+        
         if (screenWidth < 640) {
-            return baseSize * 0.8;
+            // 移动设备：缩小尺寸
+            svgWidth = Math.min(screenWidth - 32, 400); // 留32px边距
+            svgHeight = svgWidth * 0.5; // 保持2:1比例
+            fontScale = 0.7;
+        } else if (screenWidth < 768) {
+            // 平板设备：适中尺寸
+            svgWidth = Math.min(screenWidth - 64, 600);
+            svgHeight = svgWidth * 0.5;
+            fontScale = 0.85;
         }
-        return baseSize;
+        
+        return {
+            width: svgWidth,
+            height: svgHeight,
+            titleFontSize: 36 * fontScale,
+            textFontSize: 24 * fontScale,
+            footerFontSize: 14 * fontScale
+        };
     };
 
-    // 计算不同元素的字体大小
-    const titleFontSize = calculateFontSize(36);
-    const textFontSize = calculateFontSize(24);
-    const footerFontSize = calculateFontSize(14);
+    const sizes = calculateResponsiveSizes();
+    const { titleFontSize, textFontSize, footerFontSize } = sizes;
+    // 使用响应式尺寸
+    width = sizes.width;
+    height = sizes.height;
 
     // 计算文本换行
     const wrapText = (text: string, maxWidth: number, fontSize: number): string[] => {
@@ -163,7 +185,7 @@ export const generateSVGCard = ({
     };
 
     return `
-    <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" height="auto" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;"
       <defs>
         <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
