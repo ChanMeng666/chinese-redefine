@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Progress } from "@/components/ui/progress";
 import {getErrorMessage, validateWord} from "@/lib/errors";
 import { cardVariants, formVariants, buttonHoverVariants } from '@/lib/animations';
+import DeveloperSection from './DeveloperSection';
 
 
 const HanyuCardGenerator = () => {
@@ -97,23 +98,9 @@ const HanyuCardGenerator = () => {
                                 <CardTitle className="text-center text-2xl sm:text-3xl font-bold break-words">
                                     汉语新解卡片生成器
                                 </CardTitle>
-                                <div className="flex flex-col items-center space-y-2">
-                                    <p className="text-center text-sm text-slate-500 mt-2">
-                                        用现代视角重新诠释汉语词汇
-                                    </p>
-                                    <p className="text-center text-xs text-slate-400 flex items-center gap-1.5">
-                                        Created by{' '}
-                                        <a
-                                            href="https://github.com/ChanMeng666/chinese-redefine"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-500 hover:text-blue-600 transition-colors duration-200 inline-flex items-center gap-1.5"
-                                        >
-                                            Chan Meng
-                                            <span className="inline-block animate-heartbeat">💛</span>
-                                        </a>
-                                    </p>
-                                </div>
+                                <p className="text-center text-sm text-slate-500 mt-2">
+                                    用现代视角重新诠释汉语词汇
+                                </p>
                             </motion.div>
                         </CardHeader>
                         <CardContent className="space-y-6 px-4 sm:px-6">
@@ -211,6 +198,9 @@ const HanyuCardGenerator = () => {
                             </AnimatePresence>
                         </CardContent>
                     </Card>
+                    
+                    {/* 开发者展示板块 */}
+                    <DeveloperSection />
                 </motion.div>
             </div>
         </div>
