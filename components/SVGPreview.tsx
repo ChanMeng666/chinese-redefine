@@ -4,15 +4,18 @@ import { generateSVGCard } from '@/lib/svgGenerator';
 interface SVGPreviewProps {
     word: string;
     explanation: string;
+    pinyin?: string;
+    english?: string;
+    japanese?: string;
 }
 
-const SVGPreview: React.FC<SVGPreviewProps> = ({ word, explanation }) => {
+const SVGPreview: React.FC<SVGPreviewProps> = ({ word, explanation, pinyin, english, japanese }) => {
     const [svgContent, setSvgContent] = useState('');
 
     useEffect(() => {
-        const svg = generateSVGCard({ word, explanation });
+        const svg = generateSVGCard({ word, explanation, pinyin, english, japanese });
         setSvgContent(svg);
-    }, [word, explanation]);
+    }, [word, explanation, pinyin, english, japanese]);
 
     return (
         <div className="mt-6 bg-white p-4 rounded-lg shadow">

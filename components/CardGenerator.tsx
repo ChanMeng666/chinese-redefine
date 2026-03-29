@@ -17,7 +17,12 @@ import DeveloperSection from './DeveloperSection';
 const HanyuCardGenerator = () => {
     const [word, setWord] = useState('');
     const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState('');
+    const [result, setResult] = useState<{
+        explanation: string;
+        pinyin: string;
+        english: string;
+        japanese: string;
+    } | null>(null);
     const [error, setError] = useState('');
     const [remainingRequests, setRemainingRequests] = useState(5);
 
@@ -35,7 +40,7 @@ const HanyuCardGenerator = () => {
 
         setLoading(true);
         setError('');
-        setResult('');
+        setResult(null);
 
         try {
             const response = await fetch('/api/generate', {
@@ -56,7 +61,12 @@ const HanyuCardGenerator = () => {
                 throw new Error(data.error);
             }
 
-            setResult(data.result);
+            setResult({
+                explanation: data.result,
+                pinyin: data.pinyin || '',
+                english: data.english || '',
+                japanese: data.japanese || '',
+            });
             setRemainingRequests(data.remaining);
         } catch (err) {
             setError(getErrorMessage(err));
@@ -184,7 +194,7 @@ const HanyuCardGenerator = () => {
 
                             {/* Result card */}
                             <AnimatePresence mode="wait">
-                                {result && (
+                                {result !== null && (
                                     <motion.div
                                         key="result"
                                         initial="hidden"
@@ -192,7 +202,13 @@ const HanyuCardGenerator = () => {
                                         exit="exit"
                                         variants={cardVariants}
                                     >
-                                        <ResultCard word={word} explanation={result} />
+                                        <ResultCard
+                                            word={word}
+                                            explanation={result.explanation}
+                                            pinyin={result.pinyin}
+                                            english={result.english}
+                                            japanese={result.japanese}
+                                        />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

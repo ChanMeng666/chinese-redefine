@@ -6,12 +6,15 @@ import { generateSVGCard } from '@/lib/svgGenerator';
 interface DownloadButtonProps {
     word: string;
     explanation: string;
+    pinyin?: string;
+    english?: string;
+    japanese?: string;
 }
 
-const DownloadButton: React.FC<DownloadButtonProps> = ({ word, explanation }) => {
+const DownloadButton: React.FC<DownloadButtonProps> = ({ word, explanation, pinyin, english, japanese }) => {
     const handleDownload = () => {
         // 生成SVG
-        const svgContent = generateSVGCard({ word, explanation });
+        const svgContent = generateSVGCard({ word, explanation, pinyin, english, japanese });
 
         // 创建Blob
         const blob = new Blob([svgContent], { type: 'image/svg+xml' });
