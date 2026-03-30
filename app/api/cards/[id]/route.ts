@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from "@/lib/auth-server";
 import { getDb } from "@/lib/db";
 import { cards } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -9,7 +8,7 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const { data: session } = await auth.getSession();
   if (!session) {
     return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from "@/lib/auth-server";
 import { validateWord } from "@/lib/errors";
 import { getDb } from "@/lib/db";
 import { cards } from "@/lib/db/schema";
@@ -11,9 +10,7 @@ import { createId } from "@paralleldrive/cuid2";
 export async function POST(req: Request) {
   try {
     // 1. Auth check
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const { data: session } = await auth.getSession();
 
     if (!session) {
       return NextResponse.json({ error: "请先登录" }, { status: 401 });
@@ -22,14 +19,6 @@ export async function POST(req: Request) {
     if (!session.user.emailVerified) {
       return NextResponse.json(
         { error: "请先验证邮箱" },
-        { status: 403 }
-      );
-    }
-
-    // 2. Check if user is flagged
-    if (session.user.isFlagged) {
-      return NextResponse.json(
-        { error: "账户已被限制，请联系管理员" },
         { status: 403 }
       );
     }
@@ -47,7 +36,7 @@ export async function POST(req: Request) {
     // 4. Check duplicate word cache (24h)
     const cached = await findCachedCard(session.user.id, trimmedWord);
     if (cached) {
-      const quota = await checkQuota(session.user.id, session.user.tier ?? "free");
+      const quota = await checkQuota(session.user.id, "free");
       return NextResponse.json({
         id: cached.id,
         result: cached.explanation,
@@ -66,7 +55,7 @@ export async function POST(req: Request) {
     }
 
     // 5. Check quotas
-    const quota = await checkQuota(session.user.id, session.user.tier ?? "free");
+    const quota = await checkQuota(session.user.id, "free");
     if (!quota.allowed) {
       return NextResponse.json(
         {
@@ -217,7 +206,7 @@ export async function POST(req: Request) {
     // 11. Return result with updated quota
     const updatedQuota = await checkQuota(
       session.user.id,
-      session.user.tier ?? "free"
+      "free"
     );
 
     return NextResponse.json({

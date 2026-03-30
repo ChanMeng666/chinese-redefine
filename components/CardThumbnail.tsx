@@ -6,13 +6,11 @@ interface CardThumbnailProps {
   word: string;
   explanation: string;
   svgContent: string;
-  authorName: string;
   createdAt: string;
 }
 
 export default function CardThumbnail({
   svgContent,
-  authorName,
   createdAt,
 }: CardThumbnailProps) {
   return (
@@ -27,8 +25,7 @@ export default function CardThumbnail({
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
       <div className="p-3">
-        <div className="flex justify-between items-center text-xs text-slate-400">
-          <span>{authorName}</span>
+        <div className="flex justify-end items-center text-xs text-slate-400">
           <span>{new Date(createdAt).toLocaleDateString("zh-CN")}</span>
         </div>
       </div>

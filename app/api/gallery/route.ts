@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
-import { cards, users } from "@/lib/db/schema";
+import { cards } from "@/lib/db/schema";
 import { eq, desc, like, and, sql } from "drizzle-orm";
 
 export async function GET(req: Request) {
@@ -30,10 +30,8 @@ export async function GET(req: Request) {
       pinyin: cards.pinyin,
       svgContent: cards.svgContent,
       createdAt: cards.createdAt,
-      authorName: users.name,
     })
     .from(cards)
-    .innerJoin(users, eq(cards.userId, users.id))
     .where(and(...conditions))
     .orderBy(desc(cards.createdAt))
     .limit(limit)

@@ -11,7 +11,6 @@ interface GalleryCard {
   word: string;
   explanation: string;
   svgContent: string;
-  authorName: string;
   createdAt: string;
 }
 
@@ -86,7 +85,6 @@ export default function GalleryGrid() {
                 word={card.word}
                 explanation={card.explanation}
                 svgContent={card.svgContent}
-                authorName={card.authorName}
                 createdAt={card.createdAt}
               />
             ))}
