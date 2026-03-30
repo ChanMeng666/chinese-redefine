@@ -40,6 +40,9 @@ yarn-error.log*
 .wrangler
 .open-next
 
+# superpowers brainstorm
+.superpowers
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
