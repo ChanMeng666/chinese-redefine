@@ -27,7 +27,7 @@ export default function AuthLayout({
       {/* Brand mark with horizontal logo */}
       <div className="mb-8 flex flex-col items-center relative z-10">
         <img
-          src="/logo-horizontal.png"
+          src="/logo-horizontal.svg"
           alt="汉语新解"
           width={240}
           height={60}

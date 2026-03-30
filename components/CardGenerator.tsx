@@ -106,7 +106,7 @@ const HanyuCardGenerator = () => {
               className="mb-4"
             >
               <Image
-                src="/logo-horizontal.png"
+                src="/logo-horizontal.svg"
                 alt="汉语新解"
                 width={280}
                 height={70}
