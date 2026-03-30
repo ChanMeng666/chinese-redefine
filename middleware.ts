@@ -19,6 +19,11 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Let Neon Auth session verifier callback through (OAuth completion)
+  if (request.nextUrl.searchParams.has("neon_auth_session_verifier")) {
+    return NextResponse.next();
+  }
+
   // Check session
   const { data: session } = await auth.getSession();
 
