@@ -7,5 +7,5 @@ compatibility_flags = ["nodejs_compat"]
 assets = { directory = ".open-next/assets", binding = "ASSETS" }
 
 [vars]
-BETTER_AUTH_URL = "https://your-production-domain.com"
-NEXT_PUBLIC_BETTER_AUTH_URL = "https://your-production-domain.com"
+# Secrets (DATABASE_URL, OPENAI_API_KEY, NEON_AUTH_BASE_URL, NEON_AUTH_COOKIE_SECRET)
+# are set via `wrangler secret put <KEY>`
