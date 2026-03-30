@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, Eye, EyeOff, Download } from "lucide-react";
 
@@ -59,65 +58,70 @@ export default function MyCardsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+      <main className="min-h-screen bg-paper flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-ink-light" />
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-paper">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl font-bold mb-6">我的卡片</h1>
+          <h1 className="font-display text-2xl text-ink tracking-wide mb-8">
+            我的卡片
+          </h1>
 
           {cards.length === 0 ? (
-            <p className="text-center text-slate-400 py-20">
+            <p className="text-center font-display text-ink-light py-20">
               还没有生成过卡片
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-0">
               {cards.map((card) => (
-                <Card key={card.id}>
-                  <CardContent className="flex items-center justify-between p-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-lg">{card.word}</div>
-                      <div className="text-sm text-slate-500 truncate">
-                        {card.explanation}
-                      </div>
-                      <div className="text-xs text-slate-400 mt-1">
-                        {new Date(card.createdAt).toLocaleDateString("zh-CN")}
-                      </div>
+                <div
+                  key={card.id}
+                  className="flex items-center justify-between py-4 border-b border-border/40"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="font-display text-lg text-ink">
+                      {card.word}
                     </div>
-                    <div className="flex items-center gap-2 ml-4 shrink-0">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          toggleVisibility(card.id, card.isPublic)
-                        }
-                        disabled={togglingId === card.id}
-                        title={card.isPublic ? "设为隐藏" : "设为公开"}
-                      >
-                        {togglingId === card.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : card.isPublic ? (
-                          <Eye className="h-4 w-4 text-green-600" />
-                        ) : (
-                          <EyeOff className="h-4 w-4 text-slate-400" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => downloadSvg(card)}
-                        title="下载 SVG"
-                      >
-                        <Download className="h-4 w-4" />
-                      </Button>
+                    <div className="text-sm text-ink-light truncate">
+                      {card.explanation}
                     </div>
-                  </CardContent>
-                </Card>
+                    <div className="text-xs text-ink-light/50 mt-1 font-latin-serif">
+                      {new Date(card.createdAt).toLocaleDateString("zh-CN")}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 ml-4 shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        toggleVisibility(card.id, card.isPublic)
+                      }
+                      disabled={togglingId === card.id}
+                      title={card.isPublic ? "设为隐藏" : "设为公开"}
+                    >
+                      {togglingId === card.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : card.isPublic ? (
+                        <Eye className="h-4 w-4 text-jade" />
+                      ) : (
+                        <EyeOff className="h-4 w-4 text-ink-light/40" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => downloadSvg(card)}
+                      title="下载 SVG"
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
           )}

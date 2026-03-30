@@ -8,13 +8,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { useSession, authClient } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import { cardVariants, successVariants } from "@/lib/animations";
 
 export default function VerifyEmailPage() {
   return (
     <Suspense
       fallback={
         <div className="flex items-center justify-center min-h-[50vh]">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-ink-light" />
         </div>
       }
     >
@@ -33,10 +35,8 @@ function VerifyEmailContent() {
   const [success, setSuccess] = useState("");
   const router = useRouter();
 
-  // Get email from session or URL params
   const email = session?.user?.email || searchParams.get("email") || "";
 
-  // If already verified, redirect to home
   useEffect(() => {
     if (session?.user?.emailVerified) {
       router.push("/");
@@ -102,93 +102,107 @@ function VerifyEmailContent() {
   if (isPending) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-ink-light" />
       </div>
     );
   }
 
   if (success === "verified") {
     return (
-      <Card className="shadow-lg">
-        <CardContent className="py-10 space-y-6 text-center">
-          <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
-          <div>
-            <h2 className="text-2xl font-bold text-slate-800">邮箱验证成功！</h2>
-            <p className="text-slate-500 mt-2">
-              你的邮箱 <span className="font-medium text-slate-700">{email}</span> 已通过验证。
-            </p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm text-slate-500">请使用注册时的邮箱和密码登录</p>
-            <Button
-              className="w-full"
-              onClick={() => router.push(`/login?email=${encodeURIComponent(email)}`)}
-            >
-              前往登录
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <motion.div initial="hidden" animate="visible" variants={cardVariants}>
+        <Card className="shadow-sm">
+          <CardContent className="py-10 space-y-6 text-center">
+            <motion.div variants={successVariants} initial="hidden" animate="visible">
+              <CheckCircle className="h-16 w-16 text-jade mx-auto" />
+            </motion.div>
+            <div>
+              <h2 className="font-display text-2xl text-ink">邮箱验证成功！</h2>
+              <p className="text-ink-light mt-2">
+                你的邮箱{" "}
+                <span className="font-medium text-ink">{email}</span>{" "}
+                已通过验证。
+              </p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-ink-light">
+                请使用注册时的邮箱和密码登录
+              </p>
+              <Button
+                className="w-full"
+                onClick={() =>
+                  router.push(`/login?email=${encodeURIComponent(email)}`)
+                }
+              >
+                前往登录
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     );
   }
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-center text-2xl">验证邮箱</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-center text-slate-600">
-          我们已向{" "}
-          <span className="font-medium">{email || "你的邮箱"}</span>{" "}
-          发送了 6 位验证码。
-        </p>
+    <motion.div initial="hidden" animate="visible" variants={cardVariants}>
+      <Card className="shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-center font-display text-2xl tracking-wide">
+            验证邮箱
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-center text-ink-light">
+            我们已向{" "}
+            <span className="font-medium text-ink">{email || "你的邮箱"}</span>{" "}
+            发送了 6 位验证码。
+          </p>
 
-        <form onSubmit={handleVerify} className="space-y-3">
-          <Input
-            type="text"
-            placeholder="输入 6 位验证码"
-            value={code}
-            onChange={(e) =>
-              setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
-            }
-            className="text-center text-2xl tracking-[0.5em] font-mono"
-            maxLength={6}
-            autoFocus
-          />
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading || code.length !== 6}
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : null}
-            验证
-          </Button>
-        </form>
+          <form onSubmit={handleVerify} className="space-y-3">
+            <Input
+              type="text"
+              placeholder="输入 6 位验证码"
+              value={code}
+              onChange={(e) =>
+                setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+              }
+              className="text-center text-2xl tracking-[0.5em] font-display"
+              maxLength={6}
+              autoFocus
+            />
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading || code.length !== 6}
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : null}
+              验证
+            </Button>
+          </form>
 
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-        <div className="text-center">
-          <Button
-            variant="link"
-            onClick={handleResend}
-            disabled={resending}
-            className="text-sm"
-          >
-            {resending ? (
-              <Loader2 className="h-3 w-3 animate-spin mr-1" />
-            ) : null}
-            重新发送验证码
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="text-center">
+            <Button
+              variant="link"
+              onClick={handleResend}
+              disabled={resending}
+              className="text-sm"
+            >
+              {resending ? (
+                <Loader2 className="h-3 w-3 animate-spin mr-1" />
+              ) : null}
+              重新发送验证码
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

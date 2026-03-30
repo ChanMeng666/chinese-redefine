@@ -8,6 +8,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { cardVariants } from "@/lib/animations";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -23,38 +25,48 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-center text-2xl">忘记密码</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {sent ? (
-          <Alert>
-            <AlertDescription>
-              如果该邮箱已注册，你将收到重置密码的邮件。
-            </AlertDescription>
-          </Alert>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <Input
-              type="email"
-              placeholder="输入你的邮箱"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-              发送重置链接
-            </Button>
-          </form>
-        )}
-        <div className="text-center text-sm">
-          <Link href="/login" className="text-primary underline">
-            返回登录
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+    <motion.div initial="hidden" animate="visible" variants={cardVariants}>
+      <Card className="shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-center font-display text-2xl tracking-wide">
+            忘记密码
+          </CardTitle>
+          <p className="text-center text-sm text-ink-light">
+            别担心，我们帮你找回
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {sent ? (
+            <Alert>
+              <AlertDescription>
+                如果该邮箱已注册，你将收到重置密码的邮件。
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <Input
+                type="email"
+                placeholder="输入你的邮箱"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                发送重置链接
+              </Button>
+            </form>
+          )}
+          <div className="text-center text-sm">
+            <Link
+              href="/login"
+              className="text-vermillion underline-offset-4 decoration-vermillion/30 hover:underline hover:decoration-vermillion"
+            >
+              返回登录
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

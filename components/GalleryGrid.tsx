@@ -29,7 +29,7 @@ export default function GalleryGrid() {
 
     const res = await fetch(`/api/gallery?${params}`);
     const data = await res.json();
-    setCards(prev => p === 1 ? data.cards : [...prev, ...data.cards]);
+    setCards((prev) => (p === 1 ? data.cards : [...prev, ...data.cards]));
     setTotalPages(data.totalPages);
     setLoading(false);
   }, []);
@@ -51,10 +51,10 @@ export default function GalleryGrid() {
   };
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSearch} className="flex gap-2">
+    <div className="space-y-8">
+      <form onSubmit={handleSearch} className="flex gap-2 max-w-md mx-auto">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-light/40" />
           <Input
             type="text"
             placeholder="搜索词语..."
@@ -70,15 +70,15 @@ export default function GalleryGrid() {
 
       {loading && cards.length === 0 ? (
         <div className="flex justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-ink-light" />
         </div>
       ) : cards.length === 0 ? (
-        <div className="text-center py-20 text-slate-400">
+        <div className="text-center py-20 font-display text-ink-light">
           暂无卡片
         </div>
       ) : (
         <>
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
             {cards.map((card) => (
               <CardThumbnail
                 key={card.id}
@@ -93,9 +93,10 @@ export default function GalleryGrid() {
           {page < totalPages && (
             <div className="flex justify-center">
               <Button
-                variant="outline"
+                variant="ghost"
                 onClick={handleLoadMore}
                 disabled={loading}
+                className="underline-offset-4 hover:underline"
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />

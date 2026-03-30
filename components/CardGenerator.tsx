@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -15,7 +13,6 @@ import {
   formVariants,
   buttonHoverVariants,
 } from "@/lib/animations";
-import DeveloperSection from "./DeveloperSection";
 
 interface QuotaInfo {
   dailyUsed: number;
@@ -91,135 +88,148 @@ const HanyuCardGenerator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-4 sm:py-12 sm:px-6 lg:px-8">
+    <div className="pt-12 sm:pt-20 pb-16">
+      <div className="container mx-auto px-4">
         <motion.div
-          className="max-w-2xl mx-auto"
+          className="max-w-xl mx-auto"
           initial="hidden"
           animate="visible"
           variants={cardVariants}
         >
-          <Card className="shadow-lg">
-            <CardHeader className="space-y-2 px-4 sm:px-6">
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <CardTitle className="text-center text-2xl sm:text-3xl font-bold break-words">
-                  汉语新解卡片生成器
-                </CardTitle>
-                <p className="text-center text-sm text-slate-500 mt-2">
-                  用现代视角重新诠释汉语词汇
-                </p>
-              </motion.div>
-            </CardHeader>
-            <CardContent className="space-y-6 px-4 sm:px-6">
-              <motion.form
-                onSubmit={handleSubmit}
-                className="space-y-4"
-                variants={formVariants}
-              >
-                <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="输入想要重新诠释的汉语词汇..."
-                    value={word}
-                    onChange={(e) => setWord(e.target.value)}
-                    className="w-full py-4 sm:py-6 text-base sm:text-lg"
-                    maxLength={10}
-                    disabled={loading}
-                  />
-                  <AnimatePresence>
-                    {word.length > 0 && (
-                      <motion.span
-                        initial={{ opacity: 0, x: 10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -10 }}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs sm:text-sm text-slate-400"
-                      >
-                        {word.length}/10
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </div>
+          {/* Header */}
+          <div className="text-center mb-12">
+            <motion.h1
+              className="font-display text-3xl sm:text-4xl text-ink tracking-widest"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              汉语新解
+            </motion.h1>
+            <motion.p
+              className="text-ink-light text-sm mt-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              用现代视角，重新诠释每一个词
+            </motion.p>
+            <motion.div
+              className="mt-4 mx-auto w-16 h-px bg-vermillion"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            />
+          </div>
 
-                <motion.div
-                  variants={buttonHoverVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  <Button
-                    type="submit"
-                    className="w-full py-4 sm:py-6 text-base sm:text-lg"
-                    disabled={loading || !word.trim() || isExhausted}
+          {/* Input area */}
+          <motion.form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+            variants={formVariants}
+          >
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="输入一个词..."
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+                className="w-full border-0 border-b-2 border-border focus:border-ink bg-transparent py-4 text-xl font-cn-serif text-ink placeholder:text-ink-light/40 focus:outline-none transition-colors"
+                maxLength={10}
+                disabled={loading}
+              />
+              <AnimatePresence>
+                {word.length > 0 && (
+                  <motion.span
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 text-xs text-ink-light/60"
                   >
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                        正在生成新解...
-                      </>
-                    ) : isExhausted ? (
-                      "配额已用完"
-                    ) : (
-                      "生成新解卡片"
-                    )}
-                  </Button>
-                </motion.div>
-              </motion.form>
+                    {word.length}/10
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+            <motion.div
+              variants={buttonHoverVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <Button
+                type="submit"
+                className="w-full py-5 text-base tracking-wider"
+                disabled={loading || !word.trim() || isExhausted}
               >
-                <QuotaDisplay
-                  dailyUsed={quota.dailyUsed}
-                  dailyLimit={quota.dailyLimit}
-                  monthlyUsed={quota.monthlyUsed}
-                  monthlyLimit={quota.monthlyLimit}
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    正在生成新解...
+                  </>
+                ) : isExhausted ? (
+                  "配额已用完"
+                ) : (
+                  "生成新解卡片"
+                )}
+              </Button>
+            </motion.div>
+          </motion.form>
+
+          {/* Quota */}
+          <motion.div
+            className="mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <QuotaDisplay
+              dailyUsed={quota.dailyUsed}
+              dailyLimit={quota.dailyLimit}
+              monthlyUsed={quota.monthlyUsed}
+              monthlyLimit={quota.monthlyLimit}
+            />
+          </motion.div>
+
+          {/* Error */}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div
+                className="mt-6"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Alert variant="destructive" className="text-sm">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Result */}
+          <AnimatePresence mode="wait">
+            {result !== null && (
+              <motion.div
+                key="result"
+                className="mt-12"
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={cardVariants}
+              >
+                <ResultCard
+                  word={word}
+                  explanation={result.explanation}
+                  pinyin={result.pinyin}
+                  english={result.english}
+                  japanese={result.japanese}
                 />
               </motion.div>
-
-              <AnimatePresence mode="wait">
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Alert variant="destructive" className="text-sm">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <AnimatePresence mode="wait">
-                {result !== null && (
-                  <motion.div
-                    key="result"
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    variants={cardVariants}
-                  >
-                    <ResultCard
-                      word={word}
-                      explanation={result.explanation}
-                      pinyin={result.pinyin}
-                      english={result.english}
-                      japanese={result.japanese}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </CardContent>
-          </Card>
-
-          <DeveloperSection />
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </div>

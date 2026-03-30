@@ -15,17 +15,17 @@ export default function CardThumbnail({
 }: CardThumbnailProps) {
   return (
     <motion.div
-      className="break-inside-avoid mb-4 bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow"
+      className="break-inside-avoid mb-6 bg-card border border-border/60 rounded-lg overflow-hidden hover:border-border hover:shadow-sm transition-all"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -3 }}
     >
       <div
-        className="w-full"
+        className="w-full [&_svg]:w-full [&_svg]:h-auto [&_svg]:block"
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
-      <div className="p-3">
-        <div className="flex justify-end items-center text-xs text-slate-400">
+      <div className="px-3 py-2">
+        <div className="flex justify-end items-center text-xs text-ink-light font-latin-serif">
           <span>{new Date(createdAt).toLocaleDateString("zh-CN")}</span>
         </div>
       </div>

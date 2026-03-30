@@ -18,24 +18,16 @@ const SVGPreview: React.FC<SVGPreviewProps> = ({ word, explanation, pinyin, engl
     }, [word, explanation, pinyin, english, japanese]);
 
     return (
-        <div className="mt-6 bg-white p-4 rounded-lg shadow">
+        <div className="mt-6 bg-card border border-border rounded-lg p-4">
             <div
                 className="w-full flex justify-center items-center"
                 style={{ minHeight: '200px' }}
             >
                 <div
-                    className="w-full max-w-full svg-container"
+                    className="w-full max-w-full [&_svg]:w-full [&_svg]:h-auto [&_svg]:block"
                     dangerouslySetInnerHTML={{ __html: svgContent }}
                 />
             </div>
-            <style jsx>{`
-                .svg-container svg {
-                    width: 100% !important;
-                    height: auto !important;
-                    max-width: 100% !important;
-                    display: block;
-                }
-            `}</style>
         </div>
     );
 };

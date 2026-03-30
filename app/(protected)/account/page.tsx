@@ -24,28 +24,32 @@ export default function AccountPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-paper">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-lg mx-auto space-y-6">
-          <h1 className="text-2xl font-bold">账户设置</h1>
+          <h1 className="font-display text-2xl text-ink tracking-wide">
+            账户设置
+          </h1>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">个人信息</CardTitle>
+              <CardTitle className="font-cn-serif text-lg text-ink">
+                个人信息
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-1">
-                <label className="text-sm text-slate-500">邮箱</label>
+                <label className="text-sm text-ink-light">邮箱</label>
                 <div className="flex items-center gap-2">
                   <Input value={session?.user?.email || ""} disabled />
                   {session?.user?.emailVerified && (
-                    <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-jade shrink-0" />
                   )}
                 </div>
               </div>
               <form onSubmit={handleUpdateName} className="space-y-3">
                 <div className="space-y-1">
-                  <label className="text-sm text-slate-500">用户名</label>
+                  <label className="text-sm text-ink-light">用户名</label>
                   <Input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -53,12 +57,14 @@ export default function AccountPage() {
                   />
                 </div>
                 <Button type="submit" disabled={loading} size="sm">
-                  {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                  {loading && (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  )}
                   保存
                 </Button>
               </form>
               {success && (
-                <Alert>
+                <Alert className="border-jade/30 bg-jade/5 text-jade">
                   <AlertDescription>{success}</AlertDescription>
                 </Alert>
               )}
@@ -67,7 +73,9 @@ export default function AccountPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">修改密码</CardTitle>
+              <CardTitle className="font-cn-serif text-lg text-ink">
+                修改密码
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Button
