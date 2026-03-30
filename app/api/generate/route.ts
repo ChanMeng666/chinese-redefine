@@ -1,99 +1,114 @@
-import { NextResponse } from 'next/server';
-import { validateWord } from '@/lib/errors';
-import { headers } from 'next/headers';
-
-// 速率限制状态
-const RATE_LIMIT = {
-    windowMs: 60 * 1000,
-    maxRequests: 5,
-    requests: new Map<string, { count: number; timestamp: number }>()
-};
-
-// 清理过期的速率限制记录
-const cleanupRateLimits = () => {
-    const now = Date.now();
-    for (const [ip, data] of RATE_LIMIT.requests.entries()) {
-        if (now - data.timestamp > RATE_LIMIT.windowMs) {
-            RATE_LIMIT.requests.delete(ip);
-        }
-    }
-};
-
-// 检查速率限制
-const checkRateLimit = (ip: string): boolean => {
-    cleanupRateLimits();
-
-    const now = Date.now();
-    const requestData = RATE_LIMIT.requests.get(ip);
-
-    if (!requestData) {
-        RATE_LIMIT.requests.set(ip, { count: 1, timestamp: now });
-        return true;
-    }
-
-    if (now - requestData.timestamp > RATE_LIMIT.windowMs) {
-        RATE_LIMIT.requests.set(ip, { count: 1, timestamp: now });
-        return true;
-    }
-
-    if (requestData.count >= RATE_LIMIT.maxRequests) {
-        return false;
-    }
-
-    requestData.count += 1;
-    return true;
-};
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { validateWord } from "@/lib/errors";
+import { getDb } from "@/lib/db";
+import { cards } from "@/lib/db/schema";
+import { generateSVGCard } from "@/lib/svgGenerator";
+import { checkQuota, recordUsage, findCachedCard } from "@/lib/rate-limit";
+import { createId } from "@paralleldrive/cuid2";
 
 export async function POST(req: Request) {
-    try {
-        // 获取客户端IP
-        const headersList = await headers();
-        const ip = headersList.get('cf-connecting-ip') || headersList.get('x-forwarded-for') || 'unknown';
+  try {
+    // 1. Auth check
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
 
-        // 检查速率限制
-        if (!checkRateLimit(ip)) {
-            return NextResponse.json(
-                { error: '请求过于频繁，请稍后再试' },
-                { status: 429 }
-            );
-        }
+    if (!session) {
+      return NextResponse.json({ error: "请先登录" }, { status: 401 });
+    }
 
-        const { word } = await req.json();
+    if (!session.user.emailVerified) {
+      return NextResponse.json(
+        { error: "请先验证邮箱" },
+        { status: 403 }
+      );
+    }
 
-        // 验证输入
-        const validationError = validateWord(word);
-        if (validationError) {
-            return NextResponse.json(
-                { error: validationError },
-                { status: 400 }
-            );
-        }
+    // 2. Check if user is flagged
+    if (session.user.isFlagged) {
+      return NextResponse.json(
+        { error: "账户已被限制，请联系管理员" },
+        { status: 403 }
+      );
+    }
 
-        // 检查API密钥
-        const apiKey = process.env.OPENAI_API_KEY;
-        if (!apiKey) {
-            return NextResponse.json(
-                { error: 'API密钥未配置' },
-                { status: 500 }
-            );
-        }
+    const { word } = await req.json();
 
-        try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
-                },
-                body: JSON.stringify({
-                    model: process.env.AI_MODEL || 'gpt-4o-mini',
-                    temperature: 0.85,
-                    max_tokens: 500,
-                    response_format: { type: 'json_object' },
-                    messages: [
-                        {
-                            role: 'system',
-                            content: `;; 作者: 李继刚
+    // 3. Validate input
+    const validationError = validateWord(word);
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 });
+    }
+
+    const trimmedWord = word.trim();
+
+    // 4. Check duplicate word cache (24h)
+    const cached = await findCachedCard(session.user.id, trimmedWord);
+    if (cached) {
+      const quota = await checkQuota(session.user.id, session.user.tier ?? "free");
+      return NextResponse.json({
+        id: cached.id,
+        result: cached.explanation,
+        pinyin: cached.pinyin || "",
+        english: cached.english || "",
+        japanese: cached.japanese || "",
+        svgContent: cached.svgContent,
+        cached: true,
+        quota: {
+          dailyUsed: quota.dailyUsed,
+          dailyLimit: quota.dailyLimit,
+          monthlyUsed: quota.monthlyUsed,
+          monthlyLimit: quota.monthlyLimit,
+        },
+      });
+    }
+
+    // 5. Check quotas
+    const quota = await checkQuota(session.user.id, session.user.tier ?? "free");
+    if (!quota.allowed) {
+      return NextResponse.json(
+        {
+          error: quota.reason,
+          quota: {
+            dailyUsed: quota.dailyUsed,
+            dailyLimit: quota.dailyLimit,
+            monthlyUsed: quota.monthlyUsed,
+            monthlyLimit: quota.monthlyLimit,
+          },
+        },
+        { status: 429 }
+      );
+    }
+
+    // 6. Check API key
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "API密钥未配置" },
+        { status: 500 }
+      );
+    }
+
+    // 7. Call OpenAI
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: process.env.AI_MODEL || "gpt-4o-mini",
+          temperature: 0.85,
+          max_tokens: 500,
+          response_format: { type: "json_object" },
+          messages: [
+            {
+              role: "system",
+              content: `;; 作者: 李继刚
 ;; 版本: 0.1
 ;; 用途: 将一个汉语词汇进行全新角度的解释
 
@@ -125,79 +140,106 @@ export async function POST(req: Request) {
 ;; 运行规则
 ;; 1. 启动时必须运行 (start) 函数
 ;; 2. 之后调用主函数 (汉语新解 用户输入)
-;; 3. 只输出 JSON，不要输出其他任何内容`
-                        },
-                        {
-                            role: 'user',
-                            content: `${word}`
-                        }
-                    ]
-                }),
-            });
+;; 3. 只输出 JSON，不要输出其他任何内容`,
+            },
+            { role: "user", content: trimmedWord },
+          ],
+        }),
+      }
+    );
 
-            if (!response.ok) {
-                const status = response.status;
-                if (status === 401) {
-                    return NextResponse.json(
-                        { error: 'API密钥无效' },
-                        { status: 401 }
-                    );
-                }
-                if (status === 429) {
-                    return NextResponse.json(
-                        { error: 'API 调用配额已用完，请稍后重试' },
-                        { status: 429 }
-                    );
-                }
-                throw new Error(`OpenAI API returned ${status}`);
-            }
-
-            const data = await response.json();
-
-            // 检查内容过滤
-            if (data.choices?.[0]?.finish_reason === 'content_filter') {
-                return NextResponse.json(
-                    { error: '抱歉，无法生成该词语的解释，请尝试其他词语' },
-                    { status: 400 }
-                );
-            }
-
-            const text = data.choices?.[0]?.message?.content?.trim();
-
-            if (!text) {
-                throw new Error('未收到有效的响应');
-            }
-
-            // 解析结构化JSON响应
-            let parsed: { explanation: string; pinyin: string; english: string; japanese: string };
-            try {
-                const cleaned = text.replace(/^```json?\s*\n?/, '').replace(/\n?```\s*$/, '');
-                parsed = JSON.parse(cleaned);
-            } catch {
-                // fallback: 整段文本作为explanation
-                parsed = { explanation: text, pinyin: '', english: '', japanese: '' };
-            }
-
-            return NextResponse.json({
-                result: parsed.explanation,
-                pinyin: parsed.pinyin || '',
-                english: parsed.english || '',
-                japanese: parsed.japanese || '',
-                remaining: RATE_LIMIT.maxRequests - (RATE_LIMIT.requests.get(ip)?.count || 0)
-            });
-
-        } catch (error) {
-            console.error('OpenAI API Error:', error);
-            return NextResponse.json(
-                { error: '生成失败，请稍后重试' },
-                { status: 500 }
-            );
-        }
-    } catch (error) {
-        console.error('Error:', error);
+    if (!response.ok) {
+      const status = response.status;
+      if (status === 401)
+        return NextResponse.json({ error: "API密钥无效" }, { status: 401 });
+      if (status === 429)
         return NextResponse.json(
-            { error: '服务器错误，请稍后重试' },
-            { status: 500 }
+          { error: "API 调用配额已用完，请稍后重试" },
+          { status: 429 }
         );
+      throw new Error(`OpenAI API returned ${status}`);
     }
+
+    const data = await response.json();
+
+    if (data.choices?.[0]?.finish_reason === "content_filter") {
+      return NextResponse.json(
+        { error: "抱歉，无法生成该词语的解释，请尝试其他词语" },
+        { status: 400 }
+      );
+    }
+
+    const text = data.choices?.[0]?.message?.content?.trim();
+    if (!text) throw new Error("未收到有效的响应");
+
+    let parsed: {
+      explanation: string;
+      pinyin: string;
+      english: string;
+      japanese: string;
+    };
+    try {
+      const cleaned = text
+        .replace(/^```json?\s*\n?/, "")
+        .replace(/\n?```\s*$/, "");
+      parsed = JSON.parse(cleaned);
+    } catch {
+      parsed = { explanation: text, pinyin: "", english: "", japanese: "" };
+    }
+
+    // 8. Generate SVG server-side
+    const svgContent = generateSVGCard({
+      word: trimmedWord,
+      explanation: parsed.explanation,
+      pinyin: parsed.pinyin,
+      english: parsed.english,
+      japanese: parsed.japanese,
+    });
+
+    // 9. Save card to database
+    const db = getDb();
+    const cardId = createId();
+    await db.insert(cards).values({
+      id: cardId,
+      userId: session.user.id,
+      word: trimmedWord,
+      explanation: parsed.explanation,
+      pinyin: parsed.pinyin || null,
+      english: parsed.english || null,
+      japanese: parsed.japanese || null,
+      svgContent,
+      isPublic: true,
+    });
+
+    // 10. Record usage
+    await recordUsage(session.user.id);
+
+    // 11. Return result with updated quota
+    const updatedQuota = await checkQuota(
+      session.user.id,
+      session.user.tier ?? "free"
+    );
+
+    return NextResponse.json({
+      id: cardId,
+      result: parsed.explanation,
+      pinyin: parsed.pinyin || "",
+      english: parsed.english || "",
+      japanese: parsed.japanese || "",
+      svgContent,
+      cached: false,
+      quota: {
+        dailyUsed: updatedQuota.dailyUsed,
+        dailyLimit: updatedQuota.dailyLimit,
+        monthlyUsed: updatedQuota.monthlyUsed,
+        monthlyLimit: updatedQuota.monthlyLimit,
+      },
+    });
+  } catch (error) {
+    console.error("Generate Error:", error);
+    return NextResponse.json(
+      { error: "生成失败，请稍后重试" },
+      { status: 500 }
+    );
+  }
 }
