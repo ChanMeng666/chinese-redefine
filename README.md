@@ -1,6 +1,6 @@
 <div align="center"><a name="readme-top"></a>
 
-[![Project Banner](https://via.placeholder.com/1200x400/6366f1/ffffff?text=Chinese+Redefine+%E6%B1%89%E8%AF%AD%E6%96%B0%E8%A7%A3)](#)
+[![Project Banner](./public/logo-seal.svg)](#)
 
 # 🚀 Chinese Redefine<br/><h3>汉语新解 - Modern Chinese Word Redefinition</h3>
 
@@ -111,12 +111,30 @@ Whether you're a language learner, cultural researcher, or simply curious about 
 <div align="center">
 
 **Main Interface**
-<img src="./public/screenshots/screencapture-chinese-redefine-vercel-app-2025-09-06-15_30_22.png" alt="Chinese Redefine Main Interface" width="800" style="border-radius: 8px; margin-bottom: 20px;">
+<img src="./public/screenshots/screencapture-chinese-redefine-chanmeng-dev-workers-dev-2026-03-30-19_42_33.png" alt="Chinese Redefine Main Interface" width="800" style="border-radius: 8px; margin-bottom: 20px;">
 
-**Word Interpretation Result**
-<img src="./public/screenshots/screencapture-chinese-redefine-vercel-app-2025-09-06-15_32_04.png" alt="Chinese Redefine Word Interpretation" width="800" style="border-radius: 8px;">
+**Gallery**
+<img src="./public/screenshots/screencapture-chinese-redefine-chanmeng-dev-workers-dev-gallery-2026-03-30-19_42_49.png" alt="Chinese Redefine Gallery" width="800" style="border-radius: 8px; margin-bottom: 20px;">
+
+**My Cards**
+<img src="./public/screenshots/screencapture-chinese-redefine-chanmeng-dev-workers-dev-account-cards-2026-03-30-19_43_00.png" alt="Chinese Redefine My Cards" width="800" style="border-radius: 8px;">
 
 </div>
+
+<details>
+<summary><kbd>📸 Previous Version Screenshots</kbd></summary>
+
+<div align="center">
+
+**Main Interface (v1)**
+<img src="./public/screenshots/screencapture-chinese-redefine-vercel-app-2025-09-06-15_30_22.png" alt="Chinese Redefine Main Interface v1" width="800" style="border-radius: 8px; margin-bottom: 20px;">
+
+**Word Interpretation Result (v1)**
+<img src="./public/screenshots/screencapture-chinese-redefine-vercel-app-2025-09-06-15_32_04.png" alt="Chinese Redefine Word Interpretation v1" width="800" style="border-radius: 8px;">
+
+</div>
+
+</details>
 
 > [!TIP]
 > **⭐ Star us** to receive all release notifications from GitHub without delay!
@@ -631,7 +649,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - <img src="https://cdn.simpleicons.org/linkedin/0A66C2" width="16" height="16"> LinkedIn: [chanmeng666](https://www.linkedin.com/in/chanmeng666/)
 - <img src="https://cdn.simpleicons.org/github/181717" width="16" height="16"> GitHub: [ChanMeng666](https://github.com/ChanMeng666)
 - <img src="https://cdn.simpleicons.org/gmail/EA4335" width="16" height="16"> Email: [chanmeng.dev@gmail.com](mailto:chanmeng.dev@gmail.com)
-- <img src="https://cdn.simpleicons.org/internetexplorer/0078D4" width="16" height="16"> Website: [chanmeng.live](https://2d-portfolio-eta.vercel.app/)
+- <img src="https://cdn.simpleicons.org/internetexplorer/0078D4" width="16" height="16"> Website: [chanmeng.live](https://chanmeng.org/)
 
 ---
 
