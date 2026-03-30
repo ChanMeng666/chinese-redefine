@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Loader2 } from "lucide-react";
@@ -22,7 +22,7 @@ export default function GalleryGrid() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  const fetchCards = async (q: string, p: number) => {
+  const fetchCards = useCallback(async (q: string, p: number) => {
     setLoading(true);
     const params = new URLSearchParams();
     if (q) params.set("q", q);
@@ -30,14 +30,14 @@ export default function GalleryGrid() {
 
     const res = await fetch(`/api/gallery?${params}`);
     const data = await res.json();
-    setCards(p === 1 ? data.cards : [...cards, ...data.cards]);
+    setCards(prev => p === 1 ? data.cards : [...prev, ...data.cards]);
     setTotalPages(data.totalPages);
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchCards("", 1);
-  }, []);
+  }, [fetchCards]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

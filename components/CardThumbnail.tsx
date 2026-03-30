@@ -11,8 +11,6 @@ interface CardThumbnailProps {
 }
 
 export default function CardThumbnail({
-  word,
-  explanation,
   svgContent,
   authorName,
   createdAt,

@@ -1,0 +1,81 @@
+<h2>架构方案选择</h2>
+<p class="subtitle">Neon Database + Drizzle ORM + Better Auth — 部署平台决定了整体架构复杂度</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)" style="border-left: 4px solid #22c55e;">
+    <div class="letter" style="background: #22c55e;">A</div>
+    <div class="content">
+      <h3>✦ 推荐：完全迁移到 Vercel</h3>
+      <p>移除 Cloudflare Workers，使用 Vercel 原生 Next.js 部署</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>Better Auth + Drizzle + Neon 兼容性最佳，文档齐全</li>
+            <li>原生 ISR + revalidatePath — 画廊缓存零配置</li>
+            <li>迁移成本极低（仅删除 wrangler.toml 等 3 个文件）</li>
+            <li>项目已有 .vercel 目录，可直接部署</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>Vercel 免费额度有限（100GB 带宽/月）</li>
+            <li>Serverless Functions 是区域性的（非全球边缘）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>留在 Cloudflare Workers</h3>
+      <p>继续使用 @opennextjs/cloudflare，用 KV 做缓存层</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>Cloudflare 免费额度慷慨，全球边缘网络</li>
+            <li>无需迁移，保持现有部署</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>Better Auth 在 Workers 中需要额外 polyfill</li>
+            <li>ISR 需手动实现（当前配置为 dummy）</li>
+            <li>@opennextjs/cloudflare 成熟度不如 Vercel 原生支持</li>
+            <li>调试困难，兼容性风险高</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>混合方案：Vercel + Cloudflare CDN</h3>
+      <p>Vercel 跑应用，Cloudflare 做 CDN/代理和边缘限流</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>兼得两者优势：Vercel DX + Cloudflare 安全防护</li>
+            <li>边缘限流防 DDoS</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>两个平台需要管理，配置复杂</li>
+            <li>缓存一致性问题（两层缓存）</li>
+            <li>对当前规模来说过度设计</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

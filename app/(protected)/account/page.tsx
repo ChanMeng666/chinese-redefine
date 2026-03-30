@@ -75,7 +75,7 @@ export default function AccountPage() {
                 size="sm"
                 onClick={async () => {
                   if (session?.user?.email) {
-                    await authClient.forgetPassword({
+                    await authClient.requestPasswordReset({
                       email: session.user.email,
                       redirectTo: "/login",
                     });
