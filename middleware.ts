@@ -11,6 +11,7 @@ export default async function middleware(request: NextRequest) {
     "/register",
     "/verify-email",
     "/forgot-password",
+    "/debug",
   ];
   if (
     publicPatterns.some((p) => pathname === p || pathname.startsWith(p + "/"))
