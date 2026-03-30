@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Serif_SC, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import { Github, Mail } from "lucide-react";
 
 const notoSerifSC = Noto_Serif_SC({
@@ -50,7 +51,15 @@ export default function RootLayout({
 
         {/* Global minimal footer */}
         <footer className="border-t border-border/40 py-6 px-4">
-          <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-ink-light/60">
+          <div className="container mx-auto flex flex-col items-center gap-3 text-xs text-ink-light/60">
+            <Image
+              src="/logo-seal.svg"
+              alt="汉语新解"
+              width={20}
+              height={20}
+              className="w-5 h-5 opacity-40"
+            />
+            <div className="flex flex-col sm:flex-row items-center gap-2">
             <span>Built by Chan Meng</span>
             <span className="hidden sm:inline">·</span>
             <div className="flex items-center gap-3">
@@ -80,6 +89,7 @@ export default function RootLayout({
               >
                 项目仓库
               </a>
+            </div>
             </div>
           </div>
         </footer>

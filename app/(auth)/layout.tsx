@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 export default function AuthLayout({
   children,
 }: {
@@ -23,8 +24,15 @@ export default function AuthLayout({
         </div>
       </div>
 
-      {/* Brand mark */}
-      <div className="mb-8 text-center relative z-10">
+      {/* Brand mark with seal logo */}
+      <div className="mb-8 flex flex-col items-center relative z-10">
+        <img
+          src="/logo-seal.svg"
+          alt="汉语新解"
+          width={48}
+          height={48}
+          className="w-12 h-12 mb-3"
+        />
         <h1 className="font-display text-2xl text-ink tracking-widest">
           汉语新解
         </h1>

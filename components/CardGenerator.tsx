@@ -13,6 +13,7 @@ import {
   formVariants,
   buttonHoverVariants,
 } from "@/lib/animations";
+import Image from "next/image";
 
 interface QuotaInfo {
   dailyUsed: number;
@@ -98,6 +99,20 @@ const HanyuCardGenerator = () => {
         >
           {/* Header */}
           <div className="text-center mb-12">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.05, type: "spring", stiffness: 200, damping: 20 }}
+              className="mb-4"
+            >
+              <Image
+                src="/logo-seal.svg"
+                alt="汉语新解"
+                width={56}
+                height={56}
+                className="w-14 h-14 mx-auto"
+              />
+            </motion.div>
             <motion.h1
               className="font-display text-3xl sm:text-4xl text-ink tracking-widest"
               initial={{ opacity: 0, y: -20 }}

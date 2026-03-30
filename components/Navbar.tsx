@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter, usePathname } from "next/navigation";
@@ -25,9 +26,18 @@ export default function Navbar() {
         <div className="flex items-center gap-8">
           <Link
             href="/"
-            className="font-display text-xl tracking-wider text-ink hover:text-ink/80 transition-colors"
+            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
-            汉语新解
+            <Image
+              src="/logo-seal.svg"
+              alt="汉语新解"
+              width={28}
+              height={28}
+              className="w-7 h-7"
+            />
+            <span className="font-display text-xl tracking-wider text-ink">
+              汉语新解
+            </span>
           </Link>
           <Link
             href="/gallery"
