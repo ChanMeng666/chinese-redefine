@@ -63,7 +63,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const handleSocialLogin = async (provider: "github" | "google") => {
     await signIn.social({
       provider,
-      callbackURL: "/",
+      callbackURL: window.location.origin + "/",
     });
   };
 
