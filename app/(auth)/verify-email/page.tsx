@@ -64,11 +64,7 @@ function VerifyEmailContent() {
       if (result.error) {
         setError(result.error.message || "验证失败，请检查验证码是否正确");
       } else {
-        setSuccess("邮箱验证成功！正在跳转...");
-        setTimeout(() => {
-          router.push("/login");
-          router.refresh();
-        }, 1500);
+        setSuccess("verified");
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -108,6 +104,31 @@ function VerifyEmailContent() {
       <div className="flex items-center justify-center min-h-[50vh]">
         <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
+    );
+  }
+
+  if (success === "verified") {
+    return (
+      <Card className="shadow-lg">
+        <CardContent className="py-10 space-y-6 text-center">
+          <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800">邮箱验证成功！</h2>
+            <p className="text-slate-500 mt-2">
+              你的邮箱 <span className="font-medium text-slate-700">{email}</span> 已通过验证。
+            </p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm text-slate-500">请使用注册时的邮箱和密码登录</p>
+            <Button
+              className="w-full"
+              onClick={() => router.push(`/login?email=${encodeURIComponent(email)}`)}
+            >
+              前往登录
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -151,13 +172,6 @@ function VerifyEmailContent() {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {success && (
-          <Alert>
-            <CheckCircle className="h-4 w-4" />
-            <AlertDescription>{success}</AlertDescription>
           </Alert>
         )}
 

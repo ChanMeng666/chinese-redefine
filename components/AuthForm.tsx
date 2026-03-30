@@ -7,15 +7,25 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { signIn, signUp } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 
 interface AuthFormProps {
   mode: "login" | "register";
 }
 
 export default function AuthForm({ mode }: AuthFormProps) {
-  const [email, setEmail] = useState("");
+  return (
+    <Suspense fallback={null}>
+      <AuthFormContent mode={mode} />
+    </Suspense>
+  );
+}
+
+function AuthFormContent({ mode }: AuthFormProps) {
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState(searchParams.get("email") || "");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
