@@ -100,27 +100,20 @@ const HanyuCardGenerator = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.05, type: "spring", stiffness: 200, damping: 20 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05, duration: 0.5 }}
               className="mb-4"
             >
               <Image
-                src="/logo-seal.svg"
+                src="/logo-horizontal.png"
                 alt="汉语新解"
-                width={56}
-                height={56}
-                className="w-14 h-14 mx-auto"
+                width={280}
+                height={70}
+                className="h-14 sm:h-16 w-auto mx-auto"
+                priority
               />
             </motion.div>
-            <motion.h1
-              className="font-display text-3xl sm:text-4xl text-ink tracking-widest"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              汉语新解
-            </motion.h1>
             <motion.p
               className="text-ink-light text-sm mt-3"
               initial={{ opacity: 0 }}

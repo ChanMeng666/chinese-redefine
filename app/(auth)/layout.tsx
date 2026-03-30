@@ -24,19 +24,16 @@ export default function AuthLayout({
         </div>
       </div>
 
-      {/* Brand mark with seal logo */}
+      {/* Brand mark with horizontal logo */}
       <div className="mb-8 flex flex-col items-center relative z-10">
         <img
-          src="/logo-seal.svg"
+          src="/logo-horizontal.png"
           alt="汉语新解"
-          width={48}
-          height={48}
-          className="w-12 h-12 mb-3"
+          width={240}
+          height={60}
+          className="h-12 w-auto"
         />
-        <h1 className="font-display text-2xl text-ink tracking-widest">
-          汉语新解
-        </h1>
-        <div className="mt-3 mx-auto w-12 h-px bg-vermillion animate-ink-spread origin-left" />
+        <div className="mt-4 mx-auto w-12 h-px bg-vermillion animate-ink-spread origin-left" />
       </div>
 
       <div className="w-full max-w-sm relative z-10">{children}</div>

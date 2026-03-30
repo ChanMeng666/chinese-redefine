@@ -26,18 +26,16 @@ export default function Navbar() {
         <div className="flex items-center gap-8">
           <Link
             href="/"
-            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+            className="flex items-center hover:opacity-80 transition-opacity"
           >
             <Image
-              src="/logo-seal.svg"
+              src="/logo-horizontal.svg"
               alt="汉语新解"
-              width={28}
-              height={28}
-              className="w-7 h-7"
+              width={160}
+              height={40}
+              className="h-8 w-auto"
+              priority
             />
-            <span className="font-display text-xl tracking-wider text-ink">
-              汉语新解
-            </span>
           </Link>
           <Link
             href="/gallery"
