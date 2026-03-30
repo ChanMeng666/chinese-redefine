@@ -6,7 +6,6 @@ compatibility_flags = ["nodejs_compat"]
 
 assets = { directory = ".open-next/assets", binding = "ASSETS" }
 
-# [vars]
-# Non-secret environment variables can be added here.
-# Secrets should be set via `wrangler secret put <KEY>` instead.
-# DATABASE_URL, BETTER_AUTH_SECRET, etc. should be set as secrets.
+[vars]
+BETTER_AUTH_URL = "https://your-production-domain.com"
+NEXT_PUBLIC_BETTER_AUTH_URL = "https://your-production-domain.com"
