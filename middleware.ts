@@ -6,6 +6,6 @@ export default auth.middleware({
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|gallery|verify-email).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|gallery|login|register|verify-email|forgot-password).*)',
   ],
 };
