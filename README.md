@@ -448,7 +448,7 @@ docker run -p 3000:3000 -e GEMINI_API_KEY=your-key chinese-redefine
 
 **Getting Started:**
 
-1. **Visit the Application** at [chinese-redefine.vercel.app](https://chinese-redefine.vercel.app)
+1. **Visit the Application** at [chinese-redefine.chanmeng-dev.workers.dev](https://chinese-redefine.chanmeng-dev.workers.dev)
 2. **Enter Chinese Word** in the input field (up to 10 characters)
 3. **Click Generate** to get AI-powered interpretation
 4. **Preview & Download** your custom SVG card
@@ -677,7 +677,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 
 <!-- Project Links -->
-[demo-link]: https://chinese-redefine.vercel.app
+[demo-link]: https://chinese-redefine.chanmeng-dev.workers.dev
 [docs]: https://github.com/ChanMeng666/chinese-redefine#readme
 [github-issues-link]: https://github.com/ChanMeng666/chinese-redefine/issues
 [github-stars-link]: https://github.com/ChanMeng666/chinese-redefine/stargazers
