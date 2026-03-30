@@ -39,7 +39,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         if (result.error) {
           setError(result.error.message || "注册失败");
         } else {
-          router.push("/verify-email");
+          router.push(`/verify-email?email=${encodeURIComponent(email)}`);
         }
       } else {
         const result = await signIn.email({

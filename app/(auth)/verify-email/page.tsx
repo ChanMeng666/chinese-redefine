@@ -1,22 +1,40 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { useSession, authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function VerifyEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+        </div>
+      }
+    >
+      <VerifyEmailContent />
+    </Suspense>
+  );
+}
+
+function VerifyEmailContent() {
   const { data: session, isPending } = useSession();
+  const searchParams = useSearchParams();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+
+  // Get email from session or URL params
+  const email = session?.user?.email || searchParams.get("email") || "";
 
   // If already verified, redirect to home
   useEffect(() => {
@@ -31,12 +49,16 @@ export default function VerifyEmailPage() {
       setError("请输入验证码");
       return;
     }
+    if (!email) {
+      setError("无法获取邮箱地址，请返回注册页重试");
+      return;
+    }
     setLoading(true);
     setError("");
 
     try {
       const result = await authClient.emailOtp.verifyEmail({
-        email: session?.user?.email || "",
+        email,
         otp: code.trim(),
       });
       if (result.error) {
@@ -44,23 +66,28 @@ export default function VerifyEmailPage() {
       } else {
         setSuccess("邮箱验证成功！正在跳转...");
         setTimeout(() => {
-          router.push("/");
+          router.push("/login");
           router.refresh();
         }, 1500);
       }
-    } catch {
-      setError("验证失败，请稍后重试");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(`验证失败: ${msg}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleResend = async () => {
+    if (!email) {
+      setError("无法获取邮箱地址");
+      return;
+    }
     setResending(true);
     setError("");
     try {
       const result = await authClient.emailOtp.sendVerificationOtp({
-        email: session?.user?.email || "",
+        email,
         type: "email-verification",
       });
       if (result.error) {
@@ -92,9 +119,7 @@ export default function VerifyEmailPage() {
       <CardContent className="space-y-4">
         <p className="text-center text-slate-600">
           我们已向{" "}
-          <span className="font-medium">
-            {session?.user?.email || "你的邮箱"}
-          </span>{" "}
+          <span className="font-medium">{email || "你的邮箱"}</span>{" "}
           发送了 6 位验证码。
         </p>
 
