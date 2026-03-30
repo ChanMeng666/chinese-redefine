@@ -13,6 +13,10 @@ export async function PUT(
     return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }
 
+  if (!session.user.emailVerified) {
+    return NextResponse.json({ error: "请先验证邮箱" }, { status: 403 });
+  }
+
   const { id } = await params;
   const { isPublic } = await req.json();
   const db = getDb();

@@ -10,6 +10,10 @@ export async function GET() {
     return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }
 
+  if (!session.user.emailVerified) {
+    return NextResponse.json({ error: "请先验证邮箱" }, { status: 403 });
+  }
+
   const db = getDb();
   const userCards = await db
     .select({

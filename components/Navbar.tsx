@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { LogOut, User, ImageIcon } from "lucide-react";
+import { LogOut, User, ImageIcon, AlertCircle } from "lucide-react";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -35,6 +35,15 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {session ? (
             <>
+              {!session.user.emailVerified && (
+                <Link
+                  href="/verify-email"
+                  className="text-xs text-amber-600 hover:text-amber-800 flex items-center gap-1"
+                >
+                  <AlertCircle className="h-3 w-3" />
+                  验证邮箱
+                </Link>
+              )}
               <Link
                 href="/account/cards"
                 className="text-sm text-slate-600 hover:text-slate-900 flex items-center gap-1"
