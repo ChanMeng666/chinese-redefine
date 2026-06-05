@@ -60,7 +60,10 @@ export default function RootLayout({
               className="w-5 h-5 opacity-40"
             />
             <div className="flex flex-col sm:flex-row items-center gap-2">
-            <span>Built by Chan Meng</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Image src="/chan_logo.svg" alt="Chan Meng" width={16} height={16} className="rounded-sm" />
+              Built by Chan Meng
+            </span>
             <span className="hidden sm:inline">·</span>
             <div className="flex items-center gap-3">
               <a
