@@ -18,6 +18,7 @@ const sourceSerif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://chinese-redefine.chanmeng-dev.workers.dev"),
   title: "汉语新解卡片生成器",
   description: "用现代视角重新诠释汉语词汇",
   viewport: {
@@ -25,6 +26,26 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
     userScalable: false,
+  },
+  openGraph: {
+    title: "汉语新解卡片生成器 · Chinese Redefine",
+    description: "用现代视角重新诠释汉语词汇",
+    type: "website",
+    siteName: "Chinese Redefine",
+    images: [
+      {
+        url: "/og-cover.png",
+        width: 1200,
+        height: 630,
+        alt: "Chinese Redefine — reinterpreting classical Chinese words for modern times",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "汉语新解卡片生成器 · Chinese Redefine",
+    description: "用现代视角重新诠释汉语词汇",
+    images: ["/og-cover.png"],
   },
 };
 
